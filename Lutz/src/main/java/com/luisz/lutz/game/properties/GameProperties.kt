@@ -1,9 +1,9 @@
 package com.luisz.lutz.game.properties
 
 import com.luisz.lutz.arena.Arena
-import com.luisz.lutz.exception.InvalidGameProperties
+import com.luisz.lutz.exception.InvalidGamePropertiesException
 
-class GameProperties(private val recruitingTime: Int, private val stoppingTime: Int, private val minPlayersByTeam: Int, private val arena: Arena): ILutzGameProperties {
+class GameProperties(private val recruitingTime: Int, private val stoppingTime: Int, private val timeToRespawn: Int, private val minPlayersByTeam: Int, private val arena: Arena): ILutzGameProperties {
     override fun arena(): Arena {
         return arena
     }
@@ -14,6 +14,10 @@ class GameProperties(private val recruitingTime: Int, private val stoppingTime: 
 
     fun stoppingTime(): Int{
         return stoppingTime
+    }
+
+    fun timeToRespawn(): Int{
+        return timeToRespawn
     }
 
     override fun minPlayersByTeam(): Int{
@@ -37,6 +41,12 @@ class GameProperties(private val recruitingTime: Int, private val stoppingTime: 
             private var stoppingTime: Int = -1
             fun stoppingTime(t: Int): Builder{
                 this.stoppingTime = t
+                return this
+            }
+
+            private var timeToRespawn: Int = -1
+            fun timeToRespawn(t: Int): Builder{
+                this.timeToRespawn = t
                 return this
             }
 
@@ -65,10 +75,14 @@ class GameProperties(private val recruitingTime: Int, private val stoppingTime: 
                     errors.add("'minPlayersByTeam' is invalid")
                 }
 
-                if(errors.isNotEmpty()) {
-                    throw InvalidGameProperties(errors)
+                if(timeToRespawn <= 0){
+                    errors.add("'timeToRespawn' is invalid")
                 }
-                return GameProperties(recruitingTime, stoppingTime, minPlayersByTeam, arena!!)
+
+                if(errors.isNotEmpty()) {
+                    throw InvalidGamePropertiesException(errors)
+                }
+                return GameProperties(recruitingTime, stoppingTime, timeToRespawn, minPlayersByTeam, arena!!)
             }
         }
     }

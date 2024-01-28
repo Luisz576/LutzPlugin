@@ -1,7 +1,8 @@
 package com.luisz.lutz.game
 
 import com.luisz.lutz.Lutz
-import com.luisz.lutz.game.manager.ScoreboardManager
+import com.luisz.lutz.game.manager.SoulsManager
+import com.luisz.lutz.game.manager.scoreboard.ScoreboardRender
 import com.luisz.lutz.game.manager.TeamsManager
 import com.luisz.lutz.game.properties.GameProperties
 import org.bukkit.Bukkit
@@ -22,7 +23,11 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
         return false
     }
 
-    private val scoreboardManager = ScoreboardManager(this)
+    private val scoreboardRender = ScoreboardRender(this)
+
+    private val soulsManager = SoulsManager(this, properties.timeToRespawn())
+
+    private val gameListener = GameListener(this)
 
     private var timerId: Int = -1
     private var timeInSeconds: Int = 0
@@ -32,6 +37,7 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
 
     init {
         teamsManager.buildTeamsFromData(properties.arena().teams)
+        Bukkit.getPluginManager().registerEvents(gameListener, Lutz.getInstance())
         timerId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Lutz.getInstance(), this::updateSecond, 20, 0)
     }
 
@@ -46,7 +52,7 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
                 }
             }
             GameState.RUNNING -> {
-
+                soulsManager.updateSecond()
             }
             GameState.STOPPING -> {
                 if(timeInSeconds <= 0){
@@ -68,6 +74,8 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
         }
         setState(GameState.CLOSING)
 
+        soulsManager.free()
+        //TODO: unregister gamelistener
         Bukkit.getScheduler().cancelTask(timerId)
 
         setState(GameState.NONE)

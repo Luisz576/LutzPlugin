@@ -3,6 +3,7 @@ package com.luisz.lutz.game.team
 import com.luisz.lutz.entity.King
 import com.luisz.lutz.game.ILutzGame
 import com.luisz.lutz.game.profile.GamePlayerProfile
+import com.luisz.lutz.game.team.data.TeamData
 import com.luisz.lutz.message.Message
 import org.bukkit.entity.Player
 

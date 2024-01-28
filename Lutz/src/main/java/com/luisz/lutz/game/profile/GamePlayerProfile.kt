@@ -4,6 +4,7 @@ import com.luisz.lapi.common.language.Language
 import com.luisz.lutz.events.player.PlayerDisconnectGameEvent
 import com.luisz.lutz.events.player.PlayerReconnectGameEvent
 import com.luisz.lutz.game.ILutzGame
+import com.luisz.lutz.game.manager.PlayerInventoryManager
 import com.luisz.lutz.game.profile.reason.PlayerDeathReason
 import com.luisz.lutz.game.profile.reason.PlayerDieReason
 import com.luisz.lutz.game.profile.role.Role
@@ -47,6 +48,8 @@ class GamePlayerProfile(val game: ILutzGame, val player: Player, val lang: Langu
         return team
     }
 
+    private val inventoryManager = PlayerInventoryManager(this)
+
     fun makeAPlayerOf(team: Team) {
         setTeam(team)
         if(role == Role.PLAYER){
@@ -54,6 +57,15 @@ class GamePlayerProfile(val game: ILutzGame, val player: Player, val lang: Langu
         }
         setRole(Role.PLAYER)
         setState(PlayerState.ALIVE)
+    }
+
+    fun makeASpectator() {
+        setTeam(null)
+        if(role == Role.SPECTATOR){
+            return
+        }
+        setRole(Role.SPECTATOR)
+        setState(PlayerState.NONE)
     }
 
     fun playerRemovedFromTeam() {
@@ -86,6 +98,7 @@ class GamePlayerProfile(val game: ILutzGame, val player: Player, val lang: Langu
         if(reason.canTeleportAfterThis) {
             player.teleport(game.soulsSpawn())
         }
+        inventoryManager.clear()
         val reasonToEvent = when(reason){
             PlayerDeathReason.ENEMY -> {
                 PlayerDieReason.enemyReason(finalKill, this, killer())
@@ -101,6 +114,19 @@ class GamePlayerProfile(val game: ILutzGame, val player: Player, val lang: Langu
             }
         }
         Bukkit.getPluginManager().callEvent(reasonToEvent.createEvent(game))
+    }
+
+    fun respawn(){
+        if(hasKing()){
+            setState(PlayerState.ALIVE)
+            doRespawn()
+        }
+    }
+    private fun doRespawn(){
+        if(team != null){
+            player.teleport(team!!.kingdom.playerSpawn())
+            inventoryManager.respawn()
+        }
     }
 
     fun hasKing(): Boolean {

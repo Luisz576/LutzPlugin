@@ -4,7 +4,7 @@ import com.luisz.lutz.game.ILutzGame
 import com.luisz.lutz.game.profile.GamePlayerProfile
 import com.luisz.lutz.game.team.Team
 import com.luisz.lutz.game.team.TeamColor
-import com.luisz.lutz.game.team.TeamData
+import com.luisz.lutz.game.team.data.TeamData
 import com.luisz.lutz.message.Message
 import org.bukkit.entity.Player
 
