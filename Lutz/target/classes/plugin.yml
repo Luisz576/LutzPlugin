@@ -1,7 +1,0 @@
-name: Lutz
-version: '1.0-SNAPSHOT'
-main: com.luisz.lutz.Lutz
-api-version: '1.16'
-author: Luisz576
-depend:
-  - LApi
