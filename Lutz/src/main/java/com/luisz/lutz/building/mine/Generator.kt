@@ -1,6 +1,8 @@
 package com.luisz.lutz.building.mine
 
+import com.luisz.lapi.entity.hologram.Hologram
 import com.luisz.lutz.building.IBuilding
+import com.luisz.lutz.util.RomanNumeral
 import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Item
@@ -10,7 +12,7 @@ import java.util.function.Supplier
 open class Generator(properties: Properties) : IBuilding {
     private val maxLevel = properties.maxLevel()
     private val baseTimeToGenerate = properties.baseTimeToGenerate()
-    private val itemToGenerate = properties.itemToGenerate()
+    private val itemsToGenerate = properties.itemsToGenerate()
     private val timeReduceByLevel = properties.timeReduceByLevel()
     private val baseDisplayName = properties.baseDisplayName()
 
@@ -45,8 +47,15 @@ open class Generator(properties: Properties) : IBuilding {
         return time
     }
 
+    private val hologram = Hologram()
+
+    init {
+        updateDisplay()
+    }
+
     override fun reset() {
         TODO("Not yet implemented")
+        updateDisplay()
     }
 
     private fun canGenerate(): Boolean{
@@ -60,6 +69,7 @@ open class Generator(properties: Properties) : IBuilding {
     override fun upgrade() {
         if(!isDestroyed()){
             level++
+            updateDisplay()
             // TODO: animation? change blocks?
         }
     }
@@ -72,12 +82,32 @@ open class Generator(properties: Properties) : IBuilding {
             }
             time--
         }
-        updateDisplay()
+    }
+
+    private fun renderHologram(title: String) {
+        val l = getHologramLocation();
+        if(l != null) {
+            hologram.setTitle(title)
+            if(hologram.isSpawned){
+                hologram.teleport(l);
+            }else{
+                hologram.spawn(l);
+            }
+        }
+    }
+
+    private fun getHologramLocation(): Location?{
+        if(location != null) {
+            val l = location!!.clone();
+            l.add(0.0, 1.0, 0.0);
+            return l;
+        }
+        return null;
     }
 
     fun updateDisplay(){
         if(hasDisplayName()){
-            // TODO:
+            renderHologram("$baseDisplayName - ${RomanNumeral.fromNumber(level)!!.text}");
         }
     }
 
@@ -86,8 +116,8 @@ open class Generator(properties: Properties) : IBuilding {
     }
 
     private fun generate(){
-        if(itemToGenerate != null){
-            val items = itemToGenerate.get()
+        if(itemsToGenerate != null){
+            val items = itemsToGenerate.items()
             if(location != null) {
                 for (item in items) {
                     val entity = location!!.world?.spawnEntity(location!!, EntityType.DROPPED_ITEM)
@@ -102,7 +132,7 @@ open class Generator(properties: Properties) : IBuilding {
     fun copyProperties(): Properties{
         return Properties()
             .maxLevel(maxLevel)
-            .itemToGenerate(itemToGenerate)
+            .itemsToGenerate(itemsToGenerate)
             .baseTimeToGenerate(baseTimeToGenerate)
             .baseTimeToGenerate(baseTimeToGenerate)
             .baseDisplayName(baseDisplayName)
@@ -147,13 +177,13 @@ open class Generator(properties: Properties) : IBuilding {
                 return baseDisplayName
             }
 
-            private var itemToGenerate: Supplier<List<ItemStack>>? = null
-            fun itemToGenerate(itemToGenerate: Supplier<List<ItemStack>>?): Properties{
-                this.itemToGenerate = itemToGenerate
+            private var itemsToGenerate: GeneratedItems? = null
+            fun itemsToGenerate(itemsToGenerate: GeneratedItems?): Properties{
+                this.itemsToGenerate = itemsToGenerate
                 return this
             }
-            fun itemToGenerate(): Supplier<List<ItemStack>>?{
-                return itemToGenerate
+            fun itemsToGenerate(): GeneratedItems?{
+                return itemsToGenerate
             }
         }
     }

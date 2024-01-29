@@ -10,7 +10,7 @@ class ArenaLoader : LoaderAdapter<Arena> {
     private val kingdomLoader = KingdomLoader()
     private val teamDataLoader = TeamDataLoader()
 
-    override fun load(config: LConfig?, key: String?): Arena {
+    override fun load(config: LConfig, key: String): Arena {
         TODO("Not yet implemented")
     }
 }

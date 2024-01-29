@@ -93,6 +93,7 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
         soulsManager.free()
         scoreboardRender.clearRenders()
         rendableEntitiesManager.unregisterAll()
+        teamsManager.resetKingdoms()
 
         HandlerList.unregisterAll(gameListener)
         Bukkit.getScheduler().cancelTask(timerId)

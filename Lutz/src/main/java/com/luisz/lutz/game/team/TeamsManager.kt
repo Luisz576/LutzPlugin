@@ -107,4 +107,10 @@ class TeamsManager(val game: ILutzGame) {
             }
         }
     }
+
+    fun resetKingdoms() {
+        for(t in teams.values){
+            t.kingdom.reset()
+        }
+    }
 }
