@@ -1,6 +1,7 @@
 package com.luisz.lutz.game.team
 
 import com.luisz.lutz.entity.King
+import com.luisz.lutz.entity.RendableEntity
 import com.luisz.lutz.entity.TeamEntity
 import com.luisz.lutz.game.ILutzGame
 import com.luisz.lutz.game.profile.GamePlayerProfile
@@ -65,6 +66,14 @@ class Team(val game: ILutzGame, data: TeamData) {
         }
     }
 
+    fun onKingDie(king: King){
+        if(this.king == king){
+            // TODO: send title
+            removeEntity(king)
+            this.king = null
+        }
+    }
+
     fun hasKing(): Boolean {
         return king != null
     }
@@ -77,6 +86,9 @@ class Team(val game: ILutzGame, data: TeamData) {
 
     fun joinTeamEntity(teamEntity: TeamEntity){
         teamEntitiesManager.register(teamEntity)
+        if(teamEntity is RendableEntity){
+            game.registerRendableEntity(teamEntity)
+        }
     }
 
     fun isTeamEntity(teamEntity: TeamEntity): Boolean{
@@ -84,6 +96,10 @@ class Team(val game: ILutzGame, data: TeamData) {
     }
 
     fun removeEntity(teamEntity: TeamEntity) {
-        teamEntitiesManager.remove(teamEntity)
+        if(teamEntitiesManager.remove(teamEntity)){
+            if(teamEntity is RendableEntity){
+                game.unregisterRendableEntity(teamEntity)
+            }
+        }
     }
 }

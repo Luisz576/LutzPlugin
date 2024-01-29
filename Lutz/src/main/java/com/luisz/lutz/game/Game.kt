@@ -1,12 +1,15 @@
 package com.luisz.lutz.game
 
 import com.luisz.lutz.Lutz
+import com.luisz.lutz.entity.RendableEntity
 import com.luisz.lutz.game.manager.SoulsManager
+import com.luisz.lutz.game.manager.rendableentities.RendableEntitiesManager
 import com.luisz.lutz.game.manager.scoreboard.ScoreboardRender
 import com.luisz.lutz.game.team.TeamsManager
 import com.luisz.lutz.game.properties.GameProperties
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.HandlerList
 
 class Game(properties: GameProperties) : ILutzGame(properties) {
     private val recruitingTime = properties.recruitingTime()
@@ -27,7 +30,18 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
 
     private val soulsManager = SoulsManager(this, properties.timeToRespawn())
 
-    private val gameListener = GameListener(this)
+    private val rendableEntitiesManager: RendableEntitiesManager
+    override fun registerRendableEntity(rendableEntity: RendableEntity) {
+        rendableEntitiesManager.registerRendableEntity(rendableEntity)
+    }
+    override fun unregisterRendableEntity(rendableEntity: RendableEntity) {
+        rendableEntitiesManager.unregisterRendableEntity(rendableEntity)
+    }
+    override fun renderRendableEntitiesTo(player: Player){
+        rendableEntitiesManager.renderRendableEntitiesTo(player)
+    }
+
+    private val gameListener = GameListener(this, teamsManager::onKingDie)
 
     private var timerId: Int = -1
     private var timeInSeconds: Int = 0
@@ -37,6 +51,7 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
 
     init {
         teamsManager.buildTeamsFromData(properties.arena().teams)
+        rendableEntitiesManager = RendableEntitiesManager(teamsManager, soulsManager)
         Bukkit.getPluginManager().registerEvents(gameListener, Lutz.getInstance())
         timerId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Lutz.getInstance(), this::updateSecond, 20, 0)
     }
@@ -77,7 +92,9 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
 
         soulsManager.free()
         scoreboardRender.clearRenders()
-        //TODO: unregister gamelistener
+        rendableEntitiesManager.unregisterAll()
+
+        HandlerList.unregisterAll(gameListener)
         Bukkit.getScheduler().cancelTask(timerId)
 
         setState(GameState.NONE)

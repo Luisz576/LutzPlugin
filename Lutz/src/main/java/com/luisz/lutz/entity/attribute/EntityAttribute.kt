@@ -1,14 +1,15 @@
 package com.luisz.lutz.entity.attribute
 
+import com.luisz.lapi.common.tuple.Tuple
 import com.luisz.lutz.util.ArmorSet
 import org.bukkit.inventory.ItemStack
 
 abstract class EntityAttribute {
-    open fun armor(): ArmorSet? {
-        return null
+    open fun armor(): Tuple<ArmorSet?, Int> {
+        return Tuple(null, 0)
     }
-    open fun itemMainHand(): ItemStack? {
-        return null
+    open fun itemMainHand(): Tuple<ItemStack?, Int> {
+        return Tuple(null, 0)
     }
     open fun secondSelfRegenerate(): Int{
         return 0

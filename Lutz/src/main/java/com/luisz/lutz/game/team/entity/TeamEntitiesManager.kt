@@ -16,7 +16,7 @@ class TeamEntitiesManager(val team: Team) {
         return entities.contains(entity)
     }
 
-    fun remove(teamEntity: TeamEntity) {
-        entities.remove(teamEntity)
+    fun remove(teamEntity: TeamEntity): Boolean {
+        return entities.remove(teamEntity)
     }
 }

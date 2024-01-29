@@ -1,22 +1,28 @@
 package com.luisz.lutz.entity
 
+import com.luisz.lapi.common.tuple.Tuple
 import com.luisz.lapi.npc.npcs.HumanNPC
 import com.luisz.lapi.npc.npcs.options.HumanNpcOptions
 import com.luisz.lapi.player.skin.Skin
 import com.luisz.lutz.entity.attribute.KingAttributes
 import com.luisz.lutz.events.king.KingDieGameEvent
 import com.luisz.lutz.game.team.Team
+import com.luisz.lutz.util.ArmorSet
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import java.util.function.Consumer
 
-class King(team: Team) : TeamEntity(team) {
+class King(team: Team) : TeamEntity(team), RendableEntity {
     companion object {
         const val MAX_LIFE = 50f
     }
 
     private val kingAttributes = ArrayList<KingAttributes.Companion.KingAttribute>()
+
+    private var listenerToRender: Consumer<RendableEntity>? = null
 
     private var entity: HumanNPC? = null
     private var life = MAX_LIFE
@@ -40,6 +46,8 @@ class King(team: Team) : TeamEntity(team) {
         entity!!.spawn(loc)
 
         team.joinTeamEntity(this)
+
+        updateAttributes()
     }
 
     fun addModifier(attribute: KingAttributes.Companion.KingAttribute){
@@ -57,7 +65,30 @@ class King(team: Team) : TeamEntity(team) {
         return false
     }
     private fun updateAttributes(){
-        // TODO: send packets
+        if(isSpawned()) {
+            var itemMainHand = Tuple<ItemStack?, Int>(null, 0)
+            var armor = Tuple<ArmorSet?, Int>(null, 0)
+            kingAttributes.forEach {
+                val imh = it.itemMainHand()
+                if (imh.b > itemMainHand.b) {
+                    itemMainHand = imh
+                }
+                val a = it.armor()
+                if (a.b > armor.b) {
+                    armor = a
+                }
+            }
+            if (itemMainHand.a != null) {
+                entity!!.itemInMainHand = itemMainHand.a!!.clone()
+            }
+            if (armor.a != null) {
+                entity!!.itemInHead = armor.a!!.helmet?.clone()
+                entity!!.itemInChest = armor.a!!.chestplate?.clone()
+                entity!!.itemInLegs = armor.a!!.leggings?.clone()
+                entity!!.itemInFeet = armor.a!!.boots?.clone()
+            }
+            markToRender()
+        }
     }
 
     fun damage(damager: Entity, d: Float){
@@ -100,5 +131,23 @@ class King(team: Team) : TeamEntity(team) {
         }
         kingAttributes.clear()
         removeFromTeam()
+    }
+
+    override fun registerRenderListener(listener: Consumer<RendableEntity>) {
+        this.listenerToRender = listener
+    }
+
+    override fun unregisterRenderListener() {
+        this.listenerToRender = null
+    }
+
+    override fun markToRender(){ // called to render entity to everyone
+        if(isSpawned()) {
+            this.listenerToRender?.accept(this)
+        }
+    }
+
+    override fun renderTo(player: Player) {
+        entity?.renderToPlayer(player)
     }
 }

@@ -2,6 +2,7 @@ package com.luisz.lutz.game.manager
 
 import com.luisz.lutz.game.ILutzGame
 import com.luisz.lutz.game.profile.GamePlayerProfile
+import java.util.function.Consumer
 
 class SoulsManager(val game: ILutzGame, private val timeToRespawn: Int) {
     private val spectators = ArrayList<GamePlayerProfile>()
@@ -44,5 +45,9 @@ class SoulsManager(val game: ILutzGame, private val timeToRespawn: Int) {
         for(s in souls){
             game.quit(s.key.player)
         }
+    }
+
+    fun forEachSpectator(consumer: Consumer<GamePlayerProfile>) {
+        spectators.forEach(consumer)
     }
 }

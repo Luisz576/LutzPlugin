@@ -1,5 +1,7 @@
 package com.luisz.lutz.entity.attribute
 
+import com.luisz.lapi.common.tuple.FinalTuple
+import com.luisz.lapi.common.tuple.Tuple
 import com.luisz.lutz.util.ArmorSet
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -9,12 +11,14 @@ class KingAttributes {
         sealed class KingAttribute(val type: KingAttributeType) : EntityAttribute()
 
         private data object SelfRegeneration : KingAttribute(KingAttributeType.SELF_REGENERATION) {
+            private val imh = FinalTuple(ItemStack(Material.BREAD, 1), 1)
+
             override fun secondSelfRegenerate(): Int {
                 return 1
             }
 
-            override fun itemMainHand(): ItemStack {
-                return ItemStack(Material.BREAD, 1)
+            override fun itemMainHand(): Tuple<ItemStack?, Int> {
+                return imh
             }
         }
 
@@ -25,20 +29,26 @@ class KingAttributes {
         }
 
         private data object ArmorLv1 : KingAttribute(KingAttributeType.ARMOR_LV1) {
-            override fun armor(): ArmorSet? {
-                return null
+            private val a = FinalTuple(ArmorSet.build(), 1)
+
+            override fun armor(): Tuple<ArmorSet?, Int> {
+                return a
             }
         }
 
         private data object ArmorLv2 : KingAttribute(KingAttributeType.ARMOR_LV2) {
-            override fun armor(): ArmorSet? {
-                return null
+            private val a = FinalTuple(ArmorSet.build(), 2)
+
+            override fun armor(): Tuple<ArmorSet?, Int> {
+                return a
             }
         }
 
         private data object ArmorLv3 : KingAttribute(KingAttributeType.ARMOR_LV3) {
-            override fun armor(): ArmorSet? {
-                return null
+            private val a = FinalTuple(ArmorSet.build(), 3)
+
+            override fun armor(): Tuple<ArmorSet?, Int> {
+                return a
             }
         }
 

@@ -1,5 +1,6 @@
 package com.luisz.lutz.game.team
 
+import com.luisz.lutz.entity.King
 import com.luisz.lutz.game.ILutzGame
 import com.luisz.lutz.game.manager.scoreboard.IScoreRender
 import com.luisz.lutz.game.manager.scoreboard.ScoreboardData
@@ -7,6 +8,7 @@ import com.luisz.lutz.game.profile.GamePlayerProfile
 import com.luisz.lutz.game.team.data.TeamData
 import com.luisz.lutz.message.Message
 import org.bukkit.entity.Player
+import java.util.function.Consumer
 
 class TeamsManager(val game: ILutzGame) {
     private val teams = HashMap<TeamColor, Team>()
@@ -41,6 +43,12 @@ class TeamsManager(val game: ILutzGame) {
     }
     fun contains(team: Team): Boolean{
         return teams.values.contains(team)
+    }
+
+    fun onKingDie(king: King){
+        teams.forEach {
+            it.value.onKingDie(king)
+        }
     }
 
     fun getTeamByColor(color: TeamColor): Team?{
@@ -86,6 +94,10 @@ class TeamsManager(val game: ILutzGame) {
         for(td in teamsData){
             register(td)
         }
+    }
+
+    fun forEachTeam(consumer: Consumer<Team>){
+        teams.values.forEach(consumer)
     }
 
     fun renderScore(scoreRender: IScoreRender) {

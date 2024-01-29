@@ -4,4 +4,4 @@ import com.luisz.lutz.entity.King
 import com.luisz.lutz.events.GameEvent
 import com.luisz.lutz.game.ILutzGame
 
-class KingDieGameEvent(game: ILutzGame, king: King) : GameEvent(game)
+class KingDieGameEvent(game: ILutzGame, val king: King) : GameEvent(game)

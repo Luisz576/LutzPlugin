@@ -122,6 +122,7 @@ class GamePlayerProfile(val game: ILutzGame, val player: Player, val lang: Langu
     }
     private fun doRespawn(){
         if(team != null){
+            game.renderRendableEntitiesTo(player)
             player.teleport(team!!.kingdom.playerSpawn())
             inventoryManager.respawn()
         }
