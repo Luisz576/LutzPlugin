@@ -1,9 +1,9 @@
-package com.luisz.lutz.game.manager
+package com.luisz.lutz.game.team
 
 import com.luisz.lutz.game.ILutzGame
+import com.luisz.lutz.game.manager.scoreboard.IScoreRender
+import com.luisz.lutz.game.manager.scoreboard.ScoreboardData
 import com.luisz.lutz.game.profile.GamePlayerProfile
-import com.luisz.lutz.game.team.Team
-import com.luisz.lutz.game.team.TeamColor
 import com.luisz.lutz.game.team.data.TeamData
 import com.luisz.lutz.message.Message
 import org.bukkit.entity.Player
@@ -85,6 +85,14 @@ class TeamsManager(val game: ILutzGame) {
     fun buildTeamsFromData(teamsData: List<TeamData>) {
         for(td in teamsData){
             register(td)
+        }
+    }
+
+    fun renderScore(scoreRender: IScoreRender) {
+        for(t in teams.values){
+            t.forEachMember {
+                scoreRender.render(ScoreboardData.build(game), it)
+            }
         }
     }
 }

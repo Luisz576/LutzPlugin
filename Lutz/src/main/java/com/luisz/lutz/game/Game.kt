@@ -3,7 +3,7 @@ package com.luisz.lutz.game
 import com.luisz.lutz.Lutz
 import com.luisz.lutz.game.manager.SoulsManager
 import com.luisz.lutz.game.manager.scoreboard.ScoreboardRender
-import com.luisz.lutz.game.manager.TeamsManager
+import com.luisz.lutz.game.team.TeamsManager
 import com.luisz.lutz.game.properties.GameProperties
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -53,6 +53,7 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
             }
             GameState.RUNNING -> {
                 soulsManager.updateSecond()
+                teamsManager.renderScore(scoreboardRender)
             }
             GameState.STOPPING -> {
                 if(timeInSeconds <= 0){
@@ -75,6 +76,7 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
         setState(GameState.CLOSING)
 
         soulsManager.free()
+        scoreboardRender.clearRenders()
         //TODO: unregister gamelistener
         Bukkit.getScheduler().cancelTask(timerId)
 

@@ -1,9 +1,11 @@
 package com.luisz.lutz.game.team
 
 import com.luisz.lutz.entity.King
+import com.luisz.lutz.entity.TeamEntity
 import com.luisz.lutz.game.ILutzGame
 import com.luisz.lutz.game.profile.GamePlayerProfile
 import com.luisz.lutz.game.team.data.TeamData
+import com.luisz.lutz.game.team.entity.TeamEntitiesManager
 import com.luisz.lutz.message.Message
 import org.bukkit.entity.Player
 
@@ -14,6 +16,14 @@ class Team(val game: ILutzGame, data: TeamData) {
 
     private val members = ArrayList<GamePlayerProfile>()
     private var king: King? = null
+
+    private val teamEntitiesManager = TeamEntitiesManager(this)
+
+    fun forEachMember(consumer: (member: GamePlayerProfile) -> Unit){
+        for(m in members){
+            consumer.invoke(m)
+        }
+    }
 
     fun size(): Int{
         return members.size
@@ -63,5 +73,17 @@ class Team(val game: ILutzGame, data: TeamData) {
         for(m in members){
             m.sendMessage(message, *vars)
         }
+    }
+
+    fun joinTeamEntity(teamEntity: TeamEntity){
+        teamEntitiesManager.register(teamEntity)
+    }
+
+    fun isTeamEntity(teamEntity: TeamEntity): Boolean{
+        return teamEntitiesManager.contains(teamEntity)
+    }
+
+    fun removeEntity(teamEntity: TeamEntity) {
+        teamEntitiesManager.remove(teamEntity)
     }
 }

@@ -117,10 +117,8 @@ class GamePlayerProfile(val game: ILutzGame, val player: Player, val lang: Langu
     }
 
     fun respawn(){
-        if(hasKing()){
-            setState(PlayerState.ALIVE)
-            doRespawn()
-        }
+        setState(PlayerState.ALIVE)
+        doRespawn()
     }
     private fun doRespawn(){
         if(team != null){
