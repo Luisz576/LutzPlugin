@@ -1,10 +1,11 @@
-package com.luisz.lutz.entity
+package com.luisz.lutz.entity.king
 
 import com.luisz.lapi.common.tuple.Tuple
 import com.luisz.lapi.npc.npcs.HumanNPC
 import com.luisz.lapi.npc.npcs.options.HumanNpcOptions
 import com.luisz.lapi.player.skin.Skin
-import com.luisz.lutz.entity.attribute.KingAttributes
+import com.luisz.lutz.entity.RendableEntity
+import com.luisz.lutz.entity.TeamEntity
 import com.luisz.lutz.events.king.KingDieGameEvent
 import com.luisz.lutz.game.team.Team
 import com.luisz.lutz.util.ArmorSet

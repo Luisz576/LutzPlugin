@@ -1,4 +1,4 @@
-package com.luisz.lutz.building.mine
+package com.luisz.lutz.building.generator
 
 import com.luisz.lapi.entity.hologram.Hologram
 import com.luisz.lutz.building.IBuilding
@@ -6,8 +6,6 @@ import com.luisz.lutz.util.RomanNumeral
 import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Item
-import org.bukkit.inventory.ItemStack
-import java.util.function.Supplier
 
 open class Generator(properties: Properties) : IBuilding {
     private val maxLevel = properties.maxLevel()

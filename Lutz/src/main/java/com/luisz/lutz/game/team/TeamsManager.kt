@@ -1,6 +1,6 @@
 package com.luisz.lutz.game.team
 
-import com.luisz.lutz.entity.King
+import com.luisz.lutz.entity.king.King
 import com.luisz.lutz.game.ILutzGame
 import com.luisz.lutz.game.manager.scoreboard.IScoreRender
 import com.luisz.lutz.game.manager.scoreboard.ScoreboardData

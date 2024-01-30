@@ -1,6 +1,6 @@
 package com.luisz.lutz.game.team
 
-import com.luisz.lutz.entity.King
+import com.luisz.lutz.entity.king.King
 import com.luisz.lutz.entity.RendableEntity
 import com.luisz.lutz.entity.TeamEntity
 import com.luisz.lutz.game.ILutzGame

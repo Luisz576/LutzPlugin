@@ -1,14 +1,17 @@
-package com.luisz.lutz.entity.attribute
+package com.luisz.lutz.entity.king
 
 import com.luisz.lapi.common.tuple.FinalTuple
 import com.luisz.lapi.common.tuple.Tuple
+import com.luisz.lutz.entity.attribute.EntityAttribute
 import com.luisz.lutz.util.ArmorSet
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
 class KingAttributes {
     companion object {
-        sealed class KingAttribute(val type: KingAttributeType) : EntityAttribute()
+        sealed class KingAttribute(val type: KingAttributeType) : EntityAttribute(){
+            // TODO: open fun extraMoney()
+        }
 
         private data object SelfRegeneration : KingAttribute(KingAttributeType.SELF_REGENERATION) {
             private val imh = FinalTuple(ItemStack(Material.BREAD, 1), 1)

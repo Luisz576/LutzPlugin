@@ -1,6 +1,6 @@
 package com.luisz.lutz.game.kingdom
 
-import com.luisz.lutz.building.mine.Generator
+import com.luisz.lutz.building.generator.Generator
 import com.luisz.lutz.util.SecondUpdater
 import org.bukkit.Location
 

@@ -1,8 +1,8 @@
-package com.luisz.lutz.building.mine.saver
+package com.luisz.lutz.building.generator.saver
 
 import com.luisz.lapi.config.LConfig
 import com.luisz.lapi.config.saver.ConfigSaver
-import com.luisz.lutz.building.mine.Generator
+import com.luisz.lutz.building.generator.Generator
 
 class GeneratorSaver : ConfigSaver<Generator> {
     override fun save(config: LConfig, key: String, value: Generator): Boolean {

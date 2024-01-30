@@ -1,6 +1,6 @@
 package com.luisz.lutz.game
 
-import com.luisz.lutz.entity.King
+import com.luisz.lutz.entity.king.King
 import com.luisz.lutz.events.king.KingDieGameEvent
 import com.luisz.lutz.events.player.PlayerReconnectGameEvent
 import org.bukkit.event.EventHandler

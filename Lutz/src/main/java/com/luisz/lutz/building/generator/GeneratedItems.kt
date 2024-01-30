@@ -1,4 +1,4 @@
-package com.luisz.lutz.building.mine
+package com.luisz.lutz.building.generator
 
 import org.bukkit.inventory.ItemStack
 

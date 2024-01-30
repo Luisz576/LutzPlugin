@@ -23,6 +23,5 @@ abstract class EntityAttribute {
     fun itRegeneratesNextTeamMembers(): Boolean{
         return secondRegenerateNextTeamMembers() > 0
     }
-    // TODO: open fun extraMoney()
     open fun death(){}
 }

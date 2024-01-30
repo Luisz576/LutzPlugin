@@ -1,22 +1,18 @@
-package com.luisz.lutz.building.mine.loader
+package com.luisz.lutz.building.generator.loader
 
 import com.luisz.lapi.config.LConfig
 import com.luisz.lapi.config.loader.ConfigLoader
-import com.luisz.lutz.building.mine.GeneratedItems
-import com.luisz.lutz.building.mine.Generator
+import com.luisz.lutz.building.generator.GeneratedItems
+import com.luisz.lutz.building.generator.Generator
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
-class GeneratorLoader : ConfigLoader<Generator?> {
-    override fun load(config: LConfig, key: String): Generator? {
+class GeneratorLoader : ConfigLoader<Generator> {
+    override fun load(config: LConfig, key: String): Generator {
         val maxLevel = config.getInt("$key.maxLevel")
         val baseTimeToGenerate = config.getInt("$key.baseTimeToGenerate")
         val baseDisplayName = config.getString("$key.baseDisplayName")
         val timeReduceByLevel = config.getInt("$key.timeReduceByLevel")
-
-        if(maxLevel < 0 || baseTimeToGenerate < 0 || baseDisplayName == null || timeReduceByLevel < 0){
-            return null
-        }
 
         val materials = config.getList("$key.itemToGenerate") as MutableList<String>?
         var itemsToGenerate: GeneratedItems? = null
