@@ -4,6 +4,7 @@ import com.luisz.lapi.game.IGame
 import com.luisz.lutz.arena.Arena
 import com.luisz.lutz.game.manager.rendableentities.IRendableEntitiesManager
 import com.luisz.lutz.game.properties.ILutzGameProperties
+import com.luisz.lutz.message.Message
 import org.bukkit.Location
 
 abstract class ILutzGame(properties: ILutzGameProperties) : IGame(), IRendableEntitiesManager {
@@ -38,4 +39,5 @@ abstract class ILutzGame(properties: ILutzGameProperties) : IGame(), IRendableEn
 
     abstract fun amountOfPlayers(): Int
     abstract fun timeInSeconds(): Int
+    abstract fun broadcastMessage(message: Message, vararg vars: String)
 }

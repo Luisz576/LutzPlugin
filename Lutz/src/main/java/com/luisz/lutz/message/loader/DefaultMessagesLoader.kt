@@ -2,12 +2,12 @@ package com.luisz.lutz.message.loader
 
 import com.luisz.lapi.common.language.Language
 import com.luisz.lapi.config.LConfig
-import com.luisz.lapi.config.adapter.LoaderAdapter
+import com.luisz.lapi.config.loader.ConfigLoader
 import com.luisz.lutz.Lutz
 import com.luisz.lutz.message.Message
 import com.luisz.lutz.message.MessageKeys
 
-class DefaultMessagesLoader : LoaderAdapter<MutableMap<MessageKeys, Message>> {
+class DefaultMessagesLoader : ConfigLoader<MutableMap<MessageKeys, Message>> {
     override fun load(config: LConfig?, key: String?): MutableMap<MessageKeys, Message> {
         val messages = HashMap<MessageKeys, Message>()
 

@@ -7,6 +7,7 @@ import com.luisz.lutz.game.manager.rendableentities.RendableEntitiesManager
 import com.luisz.lutz.game.manager.scoreboard.ScoreboardRender
 import com.luisz.lutz.game.team.TeamsManager
 import com.luisz.lutz.game.properties.GameProperties
+import com.luisz.lutz.message.Message
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
@@ -117,5 +118,13 @@ class Game(properties: GameProperties) : ILutzGame(properties) {
         setState(GameState.STOPPING)
         timeInSeconds = stoppingTime
         // TODO:
+    }
+
+    override fun broadcastMessage(message: Message, vararg vars: String) {
+        teamsManager.forEachTeam {
+            it.forEachMember { member ->
+                member.sendMessage(message, *vars)
+            }
+        }
     }
 }

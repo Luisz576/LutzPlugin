@@ -8,6 +8,8 @@ import com.luisz.lutz.game.manager.PlayerInventoryManager
 import com.luisz.lutz.game.profile.reason.PlayerDeathReason
 import com.luisz.lutz.game.profile.reason.PlayerDieReason
 import com.luisz.lutz.game.profile.role.Role
+import com.luisz.lutz.game.shop.KingShop
+import com.luisz.lutz.game.shop.money.Money
 import com.luisz.lutz.game.team.Team
 import com.luisz.lutz.message.Message
 import org.bukkit.Bukkit
@@ -150,6 +152,24 @@ class GamePlayerProfile(val game: ILutzGame, val player: Player, val lang: Langu
         }
         setState(PlayerState.DIED)
         Bukkit.getPluginManager().callEvent(PlayerReconnectGameEvent(game, this))
+    }
+
+    fun giveMoney(money: Money){
+        if(role == Role.PLAYER){
+            for(item in money.toItems()){
+                player.inventory.addItem(item)
+            }
+        }
+    }
+
+    private val kingShop = KingShop(this)
+    fun openKingShop(){
+        if(role == Role.PLAYER){
+            kingShop.openShopTo(player)
+        }
+    }
+    fun isKingShop(invName: String): Boolean{
+        return kingShop.isMe(invName)
     }
 
     fun sendMessage(message: Message, vararg vars: String) {
